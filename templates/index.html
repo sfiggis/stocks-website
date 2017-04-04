@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Index
+{% endblock %}
+
+{% block main %}
+    <table class= table>
+        <thead>
+            <tr>
+                <th>Symbol</th>
+                <th>Name</th>
+                <th>Shares</th>
+                <th>Price</th>
+                <th>TOTAL</th>
+                <th>Buy/Sell</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for data in stocks %}
+        <form action="{{ url_for('index') }}" method="post">
+            <tr>
+               <td>
+                   <input id = "symbol" name="symbol" type="text" readonly="readonly" value="{{data.symbol}}"/>
+               </td>
+               <td>{{data.stock}}</td>
+               <td>{{data.num_shares}}</td>
+               <td>{{data.price}}</td>
+               <td>{{data.total}}</td>
+               <td>
+                    <input id = "bs_shares" value="{{ bs_shares }}" autofocus class="form-control" name="bs_shares" placeholder="shares" type="number"/>
+                    {{bs_shares}}</td>
+                <td>
+                    <input name = "submit" type="submit" value="buy">
+                </td>
+                <td>
+                    <input name = "submit" type="submit" value="sell">
+                </td>
+                
+            </tr>
+            </form>
+        {% endfor %}
+            <tr>
+                <td colspan="4">CASH</td>
+                <td>{{cash}}</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <td colspan="4"></td>
+            <td><b>{{summary}}</b></td>
+        </tfoot>
+        
+    </table>
+{% endblock %}

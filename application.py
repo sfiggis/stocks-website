@@ -75,9 +75,6 @@ def buy():
     """Buy shares of stock."""
     if request.method == "POST":
         #lookup symbol inputted using lookup func in helpers.py
-        #result = lookup(request.form.get("symbol"))
-        #display stock quote template only if valid
-        #lookup symbol inputted using lookup func in helpers.py
         lookup_result = lookup(request.form.get("symbol"))
         #check stock symbol is valid
         if not lookup_result:
@@ -102,8 +99,6 @@ def buy():
         update_cash = user_cash[0]["cash"] - spent
         #on first time use insert
         db.execute("INSERT INTO transactions (symbol, stock, num_shares, price, user_id) VALUES(:symbol, :stock, :num_shares, :price, :user_id)", symbol=request.form.get("symbol"), stock = lookup_result["name"], num_shares=request.form.get("shares"), price=lookup_result["price"], user_id=session["user_id"])
-        #on repeated times use update
-        #db.execute("UPDATE transactions SET stock=:stock, num_shares=:num_shares WHERE id=:user_id", stock=request.form.get("symbol"), num_shares=request.form.get("shares"), user_id = session["user_id"])
         #update cash in db
         db.execute("UPDATE users SET cash=:cash WHERE id=:user_id", cash = update_cash, user_id = session["user_id"])
         return redirect (url_for("index"))
@@ -229,9 +224,6 @@ def sell():
     """Sell shares of stock."""
     if request.method == "POST":
     #lookup symbol inputted using lookup func in helpers.py
-    #result = lookup(request.form.get("symbol"))
-    #display stock quote template only if valid
-    #lookup symbol inputted using lookup func in helpers.py
         lookup_result = lookup(request.form.get("symbol"))
         #check stock symbol is valid
         if not lookup_result:
@@ -257,9 +249,7 @@ def sell():
         update_cash = user_cash[0]["cash"] + sold
         
         #on first time use insert
-        db.execute("INSERT INTO transactions (symbol, stock, num_shares, price, user_id) VALUES(:symbol, :stock, :num_shares, :price, :user_id)", symbol=request.form.get("symbol"), stock = lookup_result["name"], num_shares=(-shares), price=lookup_result["price"], user_id=session["user_id"])
-        #on repeated times use update
-        #db.execute("UPDATE transactions SET stock=:stock, num_shares=:num_shares WHERE id=:user_id", stock=request.form.get("symbol"), num_shares=request.form.get("shares"), user_id = session["user_id"])
+        db.execute("INSERT INTO transactions (symbol, stock, num_shares, price, user_id) VALUES(:symbol, :stock, :num_shares, :price, :user_id)", symbol=request.form.get("symbol"), stock = lookup_result["name"], num_shares=(-shares), price=lookup_result["price"], user_id=session["user_id"]
         #update cash in db
         db.execute("UPDATE users SET cash=:cash WHERE id=:user_id", cash = update_cash, user_id = session["user_id"])
         return redirect (url_for("index"))
